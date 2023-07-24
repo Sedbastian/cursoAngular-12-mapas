@@ -1,0 +1,52 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Mapa de Santa Vera Cruz</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="apiLoaded | async">
+      <google-map [options]="options" (mapClick)="addMarker($event)">
+        <map-marker
+          *ngFor="let markerPosition of markerPositions"
+          [position]="markerPosition"
+          [options]="markerOptions"
+          (mapClick)="markerClick($event)"
+        >
+        </map-marker>
+        <div [style]="editorDeMarcadoresStyle">
+          <mat-form-field *ngIf="markerEditing">
+            <mat-label *ngIf="markerToEdit.nombre === ''">
+              lat:{{ coordinatesToAdd.lat | number : "1.2-2" }}, long:{{
+                coordinatesToAdd.lng | number : "1.2-2"
+              }}
+            </mat-label>
+            <mat-label *ngIf="markerToEdit.nombre !== ''">
+              {{ markerToEdit.nombre }}
+            </mat-label>
+            <input #nombreMarcador matInput />
+            <button
+              (click)="agregarNombreMarcador(nombreMarcador.value)"
+              mat-raised-button
+              color="primary"
+            >
+              Aceptar
+            </button>
+            <button
+              (click)="cancelarNombreMarcador()"
+              mat-raised-button
+              color="basic"
+            >
+              Cancelar
+            </button>
+            <button
+              (click)="eliminarMarcador(markerToEdit)"
+              mat-raised-button
+              color="warn"
+            >
+              Eliminar
+            </button>
+          </mat-form-field>
+        </div>
+      </google-map>
+    </div>
+  </mat-card-content>
+</mat-card>
