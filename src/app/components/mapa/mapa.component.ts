@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Marker } from 'src/app/interfaces/marker-interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // Google Maps API Key: AIzaSyCyqwyiRUKwI6VAPOs35LjbQgoOT2_fdIw
 
@@ -53,6 +54,11 @@ export class MapaComponent {
       });
       this.markerEditing = false;
       this.localStoreAllMarkers();
+      let snackBarRef = this._snackBar.open('Marcador agregado', 'Entendido');
+      snackBarRef.onAction().subscribe(() => {
+        console.log('The snackbar action was triggered!');
+        snackBarRef.dismiss();
+      });
     }
   }
 
@@ -94,7 +100,12 @@ export class MapaComponent {
     });
 
     this.markerEditing = false;
-    console.log(this.fullMarkers);
+    let snackBarRef = this._snackBar.open('Marcador eliminado', 'Entendido');
+      snackBarRef.onAction().subscribe(() => {
+        console.log('The snackbar action was triggered!');
+        snackBarRef.dismiss();
+      });
+    
   }
 
   localStoreAllMarkers() {
@@ -105,7 +116,7 @@ export class MapaComponent {
     );
   }
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private _snackBar: MatSnackBar) {
     this.apiLoaded = httpClient
       .jsonp(
         'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyqwyiRUKwI6VAPOs35LjbQgoOT2_fdIw',
